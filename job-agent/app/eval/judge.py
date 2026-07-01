@@ -10,12 +10,35 @@ from app.services.llm import judge_complete, parse_llm_json_object
 
 logger = logging.getLogger(__name__)
 
-JUDGE_PROMPT = """你是一个严格但公正的评估器。请根据以下维度给模型输出打分，每个维度 1-5 分（5 为最佳）。
+JUDGE_PROMPT = """你是一个严格但公正的评估器。请根据以下维度给模型输出打分，每个维度 1-5 分，严格使用以下锚点。
 
-## 评估维度
-- factuality (事实性)：输出是否基于简历和 JD 的客观事实，有无编造
-- relevance (相关性)：是否准确回应了用户的意图和 JD 要求
-- completeness (完整性)：是否覆盖了所有关键 gap，改写建议是否充分
+## 评估维度与锚点
+
+### factuality (事实性)
+- 5：完全基于简历/JD 客观事实，无编造，证据引用准确
+- 3：主体事实正确，但存在 1 处模糊措辞或微小推断
+- 1：存在明显编造，或大量简历中不存在的事实
+
+### relevance (相关性)
+- 5：每个 gap 都指向 JD 中真实存在的要求，方向准确
+- 3：大部分 gap 相关，但有 1-2 个泛泛或与 JD 关联较弱
+- 1：多数 gap 与 JD 无关或方向错误
+
+### completeness (完整性)
+- 5：覆盖全部 expected_gaps，且改写/补救建议充分
+- 3：覆盖 expected_gaps 的 50%-80%，或建议不充分
+- 1：漏掉 >50% expected_gaps，且无有效建议
+
+2/4 分严格对应中间水平。
+
+## 关键判定规则
+
+1. 语言一致性不扣分：如果模型输出的 gap 描述使用了 JD 原文语言（中文 JD→中文，英文 JD→英文），这是正确行为，绝不应因语言选择本身扣 factuality/relevance/completeness 分。
+2. expected_gaps checklist：设 N = expected_gaps 条数（无标注时 N=0，跳过此规则）。
+   - 模型覆盖 ≥ ⌈N × 0.6⌉ 条 → completeness 必须 ≥ 4
+   - 模型覆盖 < ⌈N × 0.3⌉ 条 → completeness 必须 ≤ 2
+   覆盖判定：模型 gap 内容与某条 expected_gap 表达相同要求即视为覆盖（语义匹配，非字面匹配）。
+3. 不因 gap 数量多而扣分：只看是否覆盖了 expected_gaps，多余的 gap 不影响 completeness（除非与 JD 完全无关，则计入 relevance）。
 
 ## 输入
 简历：
@@ -27,7 +50,7 @@ JD：
 模型输出：
 {output}
 
-预期 gap 参考（人工标注）：
+预期 gap 参考（人工标注，N 条）：
 {expected_gaps}
 
 预期改写要点参考（人工标注）：
@@ -38,11 +61,10 @@ JD：
 {{
   "factuality": 4,
   "relevance": 3,
-  "completeness": 4,
-  "comment": "简要说明扣分原因"
+  "completeness": 4
 }}
 
-不要输出 Markdown 代码块，不要输出解释文字，只输出一个 JSON 对象。
+不要输出 Markdown 代码块，不要输出解释文字，只输出一个 JSON 对象（无 comment 字段）。
 """
 
 
@@ -97,7 +119,7 @@ def _retry_prompt(prompt: str, raw: str) -> str:
     return (
         f"{prompt}\n\n"
         "上一次输出无法被 JSON 解析。请重新输出，必须只返回一个 JSON 对象，"
-        "字段只能包含 factuality、relevance、completeness、comment。"
+        "字段只能包含 factuality、relevance、completeness（无 comment 字段）。"
         f"\n\n上一次输出：\n{raw[:1000]}"
     )
 

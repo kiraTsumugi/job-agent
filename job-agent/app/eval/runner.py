@@ -84,6 +84,59 @@ async def run_evaluation(
     }
 
 
+async def rejudge_run(
+    db: AsyncSession,
+    source_run_id: str,
+    new_run_id: str,
+) -> dict:
+    """Re-score an existing run's model_output with current judge prompt.
+
+    Reuses stored model_output from source_run_id, skips agent execution.
+    Useful for A/B testing judge prompt changes without paying for agent runs.
+    """
+    rows = (await db.execute(
+        select(EvalResult).where(EvalResult.run_id == source_run_id)
+    )).scalars().all()
+    if not rows:
+        raise ValueError(f"no eval results found for source_run_id={source_run_id}")
+
+    scores = {"factuality": 0.0, "relevance": 0.0, "completeness": 0.0}
+    total = len(rows)
+    for result in rows:
+        case = (await db.execute(
+            select(EvalCase).where(EvalCase.id == result.case_id)
+        )).scalar_one()
+        new_scores = await judge_output(
+            resume_text=case.resume_text,
+            jd_text=case.jd_text,
+            model_output=result.model_output,
+            expected_gaps=case.expected_gaps,
+            expected_rewrite_points=case.expected_rewrite_points,
+        )
+        db.add(EvalResult(
+            id=str(uuid.uuid4()),
+            case_id=result.case_id,
+            run_id=new_run_id,
+            model_output=result.model_output,
+            judge_scores=new_scores,
+            prompt_version=result.prompt_version,
+            chunking_strategy=result.chunking_strategy,
+        ))
+        for key in scores:
+            scores[key] += new_scores.get(key, 0)
+
+    await db.commit()
+
+    for key in scores:
+        scores[key] = round(scores[key] / total, 2) if total else 0.0
+
+    logger.info(
+        "Rejudge %s -> %s: total=%d scores=%s",
+        source_run_id, new_run_id, total, scores,
+    )
+    return {"run_id": new_run_id, "total": total, "scores": scores}
+
+
 async def _run_agent_for_case(case: EvalCase, *, prompt_version: str = "v1") -> dict:
     graph = AgentGraph(tracer=None)  # eval 不走 trace 减少噪音
     events = []

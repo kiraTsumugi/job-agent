@@ -76,6 +76,13 @@ async def main() -> None:
     parser.add_argument("--file", type=Path, default=DEFAULT_EVAL_PATH)
     parser.add_argument("--import-db", action="store_true", help="write cases into eval_cases table")
     parser.add_argument("--run-id", default=None, help="run evaluation over eval_cases table")
+    parser.add_argument(
+        "--rejudge-from",
+        default=None,
+        metavar="SOURCE_RUN_ID",
+        help="re-score an existing run's model_output with current judge prompt; "
+             "writes results under --run-id as the new run id",
+    )
     parser.add_argument("--prompt-version", default="latest", help="core prompt version for --run-id")
     parser.add_argument("--export-report", action="store_true", help="export report for --run-id after running")
     parser.add_argument("--export-run-id", default=None, help="export report for an existing run_id")
@@ -114,7 +121,11 @@ async def main() -> None:
             prompt_manifest["fingerprint"][:12],
         )
         async with AsyncSessionLocal() as db:
-            report = await run_evaluation(db, args.run_id, prompt_version, None)
+            if args.rejudge_from:
+                from app.eval.runner import rejudge_run
+                report = await rejudge_run(db, args.rejudge_from, args.run_id)
+            else:
+                report = await run_evaluation(db, args.run_id, prompt_version, None)
         logger.info("Eval report: %s", report)
 
     report_run_id = args.export_run_id or (args.run_id if args.export_report else None)

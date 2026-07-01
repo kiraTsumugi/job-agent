@@ -1,0 +1,331 @@
+{
+  "run_id": "deepseek_v2_20260701",
+  "generated_at": "2026-07-01T06:09:49.807323+00:00",
+  "config": {
+    "llm_backend": "openai",
+    "llm_model": "deepseek-chat",
+    "judge_backend": "openai",
+    "judge_model": "deepseek-chat",
+    "prompt_version": "v2",
+    "prompt_manifest": {
+      "version": "v2",
+      "fingerprint": "b5f0c47fead8a0baef5f1a4ec7012576cb968ec9187ca8e16a1882ad241fe046",
+      "files": {
+        "plan": "v2_plan.md",
+        "analyze": "v2_analyze.md",
+        "rewrite": "v2_rewrite.md"
+      },
+      "file_hashes": {
+        "plan": "80d4bca1d817303dda071b37b253cfb4eadc8648951a0e4bd0c7aa4989992c1c",
+        "analyze": "fedb3f2271ee9505cfe879d2f6f74772bbebed6510a7085f504d0e3511a088ee",
+        "rewrite": "25fe9bcc9c9d3f335473d406428590ab579d7281542d35e685b49173d7d392d8"
+      }
+    },
+    "chunking_strategy": null
+  },
+  "summary": {
+    "total": 8,
+    "scores": {
+      "factuality": 4.5,
+      "relevance": 3.0,
+      "completeness": 3.62
+    }
+  },
+  "cases": [
+    {
+      "index": 1,
+      "case_uid": "real_jd_001",
+      "case_fingerprint": "45680bea12ffe3ad85537d7c0a30653d7e6e7a07400fa39486a26c2704a2bb9a",
+      "case_id": "44adde60-77db-4708-b367-ddb2fca27978",
+      "result_id": "49eafa68-5357-4c91-a3d6-6c168665807d",
+      "title": "(Senior) GenAI Engineer (f/m/d)",
+      "company": "Trusted Shops SE (DE)",
+      "source": "arbeitnow",
+      "source_url": "https://www.arbeitnow.com/jobs/companies/trusted-shops-se-de/senior-genai-engineer-berlin-354497",
+      "case_type": "high_relevance",
+      "keyword_score": 8,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 5.0,
+        "relevance": 4.0,
+        "completeness": 4.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "weak_match",
+      "match_score": 60,
+      "gap_count": 8,
+      "first_gap_category": "seniority_scope",
+      "first_gap": "Proven experience deploying high-accuracy, scaled AI Systems in production, beyond PoCs or simple Chatbots",
+      "expected_gaps": [
+        "候选人经验年限可能不足以覆盖 senior/lead 或多年生产经验要求",
+        "简历中缺少明确云平台部署与运维经验",
+        "需要补充生产级 GenAI/LLM 项目的规模、可靠性和业务指标",
+        "简历中缺少数据管道、分析或 ETL 项目的明确证据"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "强化 Agent 编排、检索增强生成和 LLM 输出稳定性经验",
+        "如属实，补充云平台、容器化部署和生产运维经验"
+      ]
+    },
+    {
+      "index": 2,
+      "case_uid": "real_jd_002",
+      "case_fingerprint": "8b1f0ba22b032ee051f54a6e5614414236a51b7cdf37ba6a6bc579bc80164a78",
+      "case_id": "4f936de3-b617-4e50-8b22-faa920d057d7",
+      "result_id": "b1c804b1-a42a-48a8-8a30-71c9911571b8",
+      "title": "GenAI Innovation Engineer (all genders) - Gestalte die KI-Zukunft",
+      "company": "mi.ro Personalvermittlung",
+      "source": "arbeitnow",
+      "source_url": "https://www.arbeitnow.com/jobs/companies/miro-personalvermittlung/genai-innovation-engineer-all-genders-gestalte-die-ki-zukunft-wetter-243788",
+      "case_type": "high_relevance",
+      "keyword_score": 6,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 4.0,
+        "relevance": 3.0,
+        "completeness": 4.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "weak_match",
+      "match_score": 60,
+      "gap_count": 8,
+      "first_gap_category": "seniority_scope",
+      "first_gap": "mindestens fünf Jahre Berufserfahrung im Bereich Künstliche Intelligenz, Softwareentwicklung oder Automatisierung",
+      "expected_gaps": [
+        "需要补充生产级 GenAI/LLM 项目的规模、可靠性和业务指标",
+        "简历中缺少数据管道、分析或 ETL 项目的明确证据"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "强化 Agent 编排、检索增强生成和 LLM 输出稳定性经验"
+      ]
+    },
+    {
+      "index": 3,
+      "case_uid": "real_jd_003",
+      "case_fingerprint": "27302c3b8ca7e1b73d26e8b650aeea18fc8cad19b44eda750b423e42acf59796",
+      "case_id": "4d921d48-5441-4691-a4d8-1a22ab0d382c",
+      "result_id": "485b7b03-d8ba-420d-9d76-10cf2f4d18f3",
+      "title": "Site Reliability Engineer (m/f/d)",
+      "company": "gridscale GmbH",
+      "source": "arbeitnow",
+      "source_url": "https://www.arbeitnow.com/jobs/companies/gridscale-gmbh/site-reliability-engineer-koln-166703",
+      "case_type": "high_relevance",
+      "keyword_score": 5,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 5.0,
+        "relevance": 4.0,
+        "completeness": 4.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "not_recommended",
+      "match_score": 28,
+      "gap_count": 8,
+      "first_gap_category": "must_have_skill",
+      "first_gap": "Several years of hands-on experience running production infrastructure (SRE, Platform, or DevOps)",
+      "expected_gaps": [
+        "候选人经验年限可能不足以覆盖 senior/lead 或多年生产经验要求",
+        "简历中缺少明确云平台部署与运维经验",
+        "简历中缺少基础设施、Kubernetes 或 IaC 相关项目经验",
+        "需要补充生产级 GenAI/LLM 项目的规模、可靠性和业务指标"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "强化 Agent 编排、检索增强生成和 LLM 输出稳定性经验",
+        "如属实，补充云平台、容器化部署和生产运维经验"
+      ]
+    },
+    {
+      "index": 4,
+      "case_uid": "real_jd_004",
+      "case_fingerprint": "31939100e67f13314bdb5e2bc679d90064f17139d38f2c0f8e4086399901472b",
+      "case_id": "ed7599e7-67b3-4a8c-bee9-65effa27fdff",
+      "result_id": "642f8ebd-1f98-4269-ac62-4d690bd0a025",
+      "title": "Graduate Business Operations Associate",
+      "company": "Bezos.AI",
+      "source": "remoteok",
+      "source_url": "https://remoteOK.com/remote-jobs/remote-graduate-business-operations-associate-bezos-ai-1134231",
+      "case_type": "medium_relevance",
+      "keyword_score": 3,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 4.0,
+        "relevance": 3.0,
+        "completeness": 4.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "possible_match",
+      "match_score": 72,
+      "gap_count": 7,
+      "first_gap_category": "domain_experience",
+      "first_gap": "Operations experience in logistics, e-commerce, or supply chain",
+      "expected_gaps": [
+        "需要补充生产级 GenAI/LLM 项目的规模、可靠性和业务指标",
+        "简历中缺少数据管道、分析或 ETL 项目的明确证据"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "强化 Agent 编排、检索增强生成和 LLM 输出稳定性经验"
+      ]
+    },
+    {
+      "index": 5,
+      "case_uid": "real_jd_005",
+      "case_fingerprint": "b74441ff7c6462bf9344261f7352144151a18d55e128d528173d893f2def3383",
+      "case_id": "56913a19-9961-45fe-87a5-3c2fda17575e",
+      "result_id": "c9c0c028-09d1-4494-a08b-59a19af91c3a",
+      "title": "Data Engineers",
+      "company": "EY",
+      "source": "remoteok",
+      "source_url": "https://remoteOK.com/remote-jobs/remote-data-engineers-ey-1134306",
+      "case_type": "medium_relevance",
+      "keyword_score": 3,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 4.0,
+        "relevance": 3.0,
+        "completeness": 4.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "weak_match",
+      "match_score": 62,
+      "gap_count": 8,
+      "first_gap_category": "seniority_scope",
+      "first_gap": "3+ years of experience in data engineering, data platforms or ETL development",
+      "expected_gaps": [
+        "候选人经验年限可能不足以覆盖 senior/lead 或多年生产经验要求",
+        "简历中缺少明确云平台部署与运维经验",
+        "简历中缺少数据管道、分析或 ETL 项目的明确证据"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "如属实，补充云平台、容器化部署和生产运维经验"
+      ]
+    },
+    {
+      "index": 6,
+      "case_uid": "real_jd_006",
+      "case_fingerprint": "21e08b0a1bb799e8e3ec1faf68ed5a4995fd97ca83366462af12b5cf4c046251",
+      "case_id": "1a759b04-0af5-459a-903b-9dc53c36a4d2",
+      "result_id": "ced14265-24fd-436e-bb56-13fbde19f266",
+      "title": "British English Voice Recording Specialist Lancaster",
+      "company": "OpsArmy Careers",
+      "source": "remoteok",
+      "source_url": "https://remoteOK.com/remote-jobs/remote-british-english-voice-recording-specialist-lancaster-opsarmy-careers-1134221",
+      "case_type": "medium_relevance",
+      "keyword_score": 3,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 5.0,
+        "relevance": 1.0,
+        "completeness": 1.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "not_recommended",
+      "match_score": 18,
+      "gap_count": 8,
+      "first_gap_category": "language_location",
+      "first_gap": "Native or near-native proficiency in British English",
+      "expected_gaps": [
+        "需要补充生产级 GenAI/LLM 项目的规模、可靠性和业务指标"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "强化 Agent 编排、检索增强生成和 LLM 输出稳定性经验"
+      ]
+    },
+    {
+      "index": 7,
+      "case_uid": "real_jd_007",
+      "case_fingerprint": "f86bbc1fda230c73f662684f58ce2db7969107094a125cb44d571242a1dbc3ec",
+      "case_id": "c68b4d74-4202-4aff-bab9-1ba1927ed681",
+      "result_id": "6395a6e7-1885-4435-a660-d226230a52c5",
+      "title": "Founding Engineer",
+      "company": "Junini GmbH",
+      "source": "arbeitnow",
+      "source_url": "https://www.arbeitnow.com/jobs/companies/junini-gmbh/founding-engineer-berlin-98586",
+      "case_type": "medium_relevance",
+      "keyword_score": 3,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 4.0,
+        "relevance": 3.0,
+        "completeness": 4.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "weak_match",
+      "match_score": 42,
+      "gap_count": 8,
+      "first_gap_category": "must_have_skill",
+      "first_gap": "Mindestens 5 Jahre Backend-Erfahrung, sicher in Java/Kotlin und im Spring-Boot-Ökosystem",
+      "expected_gaps": [
+        "简历中缺少明确云平台部署与运维经验",
+        "需要补充生产级 GenAI/LLM 项目的规模、可靠性和业务指标"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "强化 Agent 编排、检索增强生成和 LLM 输出稳定性经验",
+        "如属实，补充云平台、容器化部署和生产运维经验"
+      ]
+    },
+    {
+      "index": 8,
+      "case_uid": "real_jd_008",
+      "case_fingerprint": "9e14435f06c14b60510fb7206af0ed5161edb27775d11250d4d186f69fc01310",
+      "case_id": "6645e713-7b7a-4da5-ab81-517b0bbddd50",
+      "result_id": "a00a09f5-e81d-4d3b-9455-652515e36bf1",
+      "title": "Entry Level Scheduling &amp; Coordinating Reservations Online",
+      "company": "Destination Careers",
+      "source": "remoteok",
+      "source_url": "https://remoteOK.com/remote-jobs/remote-entry-level-scheduling-amp-coordinating-reservations-online-destination-careers-1134224",
+      "case_type": "medium_relevance",
+      "keyword_score": 3,
+      "prompt_version": "v2",
+      "chunking_strategy": null,
+      "created_at": "2026-07-01T06:06:49.593089+00:00",
+      "judge_scores": {
+        "factuality": 5.0,
+        "relevance": 3.0,
+        "completeness": 4.0
+      },
+      "analysis_schema_version": "v2_analyze",
+      "decision": "weak_match",
+      "match_score": 30,
+      "gap_count": 8,
+      "first_gap_category": "domain_experience",
+      "first_gap": "Experience in scheduling, reservations, customer service, hospitality, or administrative support",
+      "expected_gaps": [
+        "需要补充生产级 GenAI/LLM 项目的规模、可靠性和业务指标",
+        "简历中缺少数据管道、分析或 ETL 项目的明确证据"
+      ],
+      "expected_rewrite_points": [
+        "突出 Python、FastAPI、LangGraph、RAG 与可测试工程闭环",
+        "补充量化指标、部署环境、系统可靠性和业务结果",
+        "强化 Agent 编排、检索增强生成和 LLM 输出稳定性经验"
+      ]
+    }
+  ]
+}
