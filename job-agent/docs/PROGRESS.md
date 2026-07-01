@@ -2,7 +2,7 @@
 
 ## 当前阶段
 
-项目处在 `AI_Agent_实习项目方案.md` 的 D12 部署阶段。
+D12 部署闭环完成。线上 demo 已可访问。进 D13(README + demo 视频 + 博客)。
 
 已完成：
 
@@ -82,6 +82,16 @@
   - 新增 `tests/test_rate_limit.py` 覆盖 health 豁免、heavy 端点超限 429、429 响应 schema；后端测试 48 passed。
   - 前端新增左侧历史会话侧栏：`lib/api.ts` 加 `listConversations` / `getConversation`；`page.tsx` 改 4 列 grid，初始加载 + chat 完成后刷新列表，点击 conversation 拉取详情填充 messages，"New chat" 按钮重置状态。
   - 后端 + 前端联调 smoke：`/health`、`/ready`、`/api/conversations`、`/api/upload`（非法格式正确返回 400 + 中文错误），rate limit 中间件按预期豁免 `/health` / `/ready`。
+- D12 线上部署完成（Railway + Qdrant Cloud + Vercel）：
+  - Qdrant Cloud Free 1GB（GCP Australia Southeast 1）。
+  - Railway 后端：`job-agent-production-014d.up.railway.app`；PostgreSQL（internal + public proxy）+ Redis；18 个 env vars；`/health` `/ready` 公网可达。
+  - 解决 3 个部署阻塞：
+    - `CORS_ORIGINS` 解析：用 `Annotated[list[str], NoDecode]` 跳过 EnvSettingsSource 的 JSON 预解析（commit `8ab8dd6`）。
+    - `.dockerignore` 排除 `scripts/` 跟 `COPY scripts/` 冲突：改为只排 `scripts/__pycache__`（commit `bdc346f`）。
+    - 本地无法直连 Railway public PG proxy（国内 GFW 丢包）：Dockerfile CMD 启动时跑 `scripts/ingest.py --vectors && scripts/ingest_eval_jds.py && uvicorn ...`，容器内走 `postgres.railway.internal`（commit `50500f5`）。
+  - Vercel 前端：`job-agent-one-peach.vercel.app`；Root Directory = `job-agent/frontend`；Framework Preset 必须显式选 **Next.js**（默认 `Other` 会导致 404）。
+  - 生产数据：PG `JD` 表 11 条（3 sample + 8 eval）；Qdrant collection `job_agent_chunks_bge_m3_sf` 写入 16 个 chunks；每次 redeploy 自动幂等重灌。
+  - 端到端冒烟通过：上传 PDF/DOCX → JD → SSE 流（`conversation → planner → retriever → analyzer → complete → done`）→ 历史会话侧栏加载 → 多轮 rewrite 节点触发；样例简历对 SAMPLE_JD 给出 match_score=80。
 
 ## 主要缺口
 
@@ -135,10 +145,10 @@
 
 ## 下一步方向
 
-D12 代码侧准备收尾。v2 + strict judge 是生产默认，rate limit 已上、历史会话侧栏已上、reranker 不进默认链路。剩下是实际部署动作：
+D12 完成。线上 demo 已可访问。下一步进 D13（README + demo 视频 + 博客）：
 
-1. 部署后端到 Railway / Fly.io，前端到 Vercel，填生产 CORS 和 `NEXT_PUBLIC_API_BASE_URL`（用户操作，需要账号）。
-2. 部署后跑 `curl https://<backend>/ready` 验证三个依赖服务健康；前端访问一次完整链路（上传 → JD → SSE → 历史）。
-3. 录 2 分钟 demo 视频 + README + 博客，进 D13。
-4. （可选优化）v2 `completeness` 弱点排查；前端补评测报告入口和 JD/简历 diff 视图。
-5. （可选优化）Embedding 缓存（Redis），单 worker 流量小，D12 不做也不阻塞。
+1. **README**：加架构图（mermaid）、一键启动说明、demo 截图/GIF、评测报告亮点（v2 + strict judge 反超、reranker 负结果）。
+2. **2 分钟 demo 视频**：覆盖上传 → 分析 → 改写 → 历史 4 个核心场景；旁白讲技术亮点（LangGraph 状态机 / Hybrid Search / LLM-as-Judge）。
+3. **博客**：掘金/小红书发技术复盘；重点写 3 个故事：(a) v2 prompt + strict judge 反超，(b) reranker 评测负收益放弃集成，(c) Railway 部署踩坑实录。
+4. （可选优化）v2 `completeness` 弱点排查；前端补评测报告入口和 JD/简历 diff 视图；加 Redis Embedding 缓存。
+5. （可选优化）扩展 eval set 到 30 条，复用 `scripts/build_real_eval_cases.py` 流程。

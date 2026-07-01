@@ -5,3 +5,6 @@ __pycache__/
 *.egg-info/
 node_modules/
 .next/
+
+# personal test data (resumes for local demo, not part of the project)
+job-agent/data/resumes/
