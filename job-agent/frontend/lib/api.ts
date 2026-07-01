@@ -19,6 +19,28 @@ export type UploadResponse = {
   parsed_text: string;
 };
 
+export type ConversationSummary = {
+  id: string;
+  title: string;
+  message_count: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ConversationMessage = {
+  role?: string;
+  content?: string;
+  [key: string]: unknown;
+};
+
+export type ConversationResponse = {
+  id: string;
+  title: string;
+  messages: ConversationMessage[];
+  created_at: string;
+  updated_at: string;
+};
+
 export async function uploadResume(file: File): Promise<UploadResponse> {
   const form = new FormData();
   form.append("file", file);
@@ -112,4 +134,20 @@ async function readError(response: Response): Promise<string> {
   } catch {
     return response.statusText;
   }
+}
+
+export async function listConversations(): Promise<ConversationSummary[]> {
+  const response = await fetch(`${API_BASE_URL}/api/conversations`);
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+  return response.json();
+}
+
+export async function getConversation(id: string): Promise<ConversationResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/conversations/${encodeURIComponent(id)}`);
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+  return response.json();
 }

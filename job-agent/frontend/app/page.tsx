@@ -1,8 +1,16 @@
 "use client";
 
-import { FormEvent, useMemo, useRef, useState } from "react";
-import { FileUp, Play, Save, Square, Wand2 } from "lucide-react";
-import { createJd, streamChat, StreamEvent, uploadResume } from "../lib/api";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FileUp, MessageSquarePlus, Play, Save, Square, Wand2 } from "lucide-react";
+import {
+  ConversationSummary,
+  createJd,
+  getConversation,
+  listConversations,
+  streamChat,
+  StreamEvent,
+  uploadResume,
+} from "../lib/api";
 
 type Message = {
   role: "user" | "assistant";
@@ -29,12 +37,57 @@ export default function HomePage() {
   const [events, setEvents] = useState<StreamEvent[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [conversations, setConversations] = useState<ConversationSummary[]>([]);
+  const [convsError, setConvsError] = useState("");
   const abortRef = useRef<AbortController | null>(null);
 
   const finalOutput = useMemo(() => {
     const complete = [...events].reverse().find((item) => item.event === "complete");
     return complete ? JSON.stringify(complete.data, null, 2) : "";
   }, [events]);
+
+  useEffect(() => {
+    refreshConversations().catch(() => undefined);
+  }, []);
+
+  async function refreshConversations() {
+    setConvsError("");
+    try {
+      const list = await listConversations();
+      setConversations(list);
+    } catch (err) {
+      setConvsError(err instanceof Error ? err.message : "会话列表加载失败");
+    }
+  }
+
+  function startNewChat() {
+    setConversationId("");
+    setMessages([]);
+    setEvents([]);
+    setError("");
+  }
+
+  async function selectConversation(id: string) {
+    if (busy) return;
+    setError("");
+    setBusy(true);
+    try {
+      const conv = await getConversation(id);
+      const loaded: Message[] = (conv.messages || [])
+        .filter((m) => typeof m.content === "string")
+        .map((m) => ({
+          role: m.role === "user" ? "user" : "assistant",
+          content: String(m.content ?? ""),
+        }));
+      setConversationId(conv.id);
+      setMessages(loaded);
+      setEvents([]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "会话加载失败");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function onUpload(file?: File) {
     if (!file) return;
@@ -58,7 +111,7 @@ export default function HomePage() {
       const result = await createJd({
         title: jdTitle.trim() || "Untitled JD",
         company: company.trim() || "Unknown",
-        raw_text: jdText
+        raw_text: jdText,
       });
       setJdId(result.id);
     } catch (err) {
@@ -84,7 +137,7 @@ export default function HomePage() {
           message: userMessage,
           conversation_id: conversationId || undefined,
           resume_token: resumeToken || undefined,
-          jd_id: jdId || undefined
+          jd_id: jdId || undefined,
         },
         (item) => {
           setEvents((prev) => [...prev, item]);
@@ -95,15 +148,16 @@ export default function HomePage() {
           if (item.event === "complete") {
             setMessages((prev) => [
               ...prev,
-              { role: "assistant", content: JSON.stringify(item.data, null, 2) }
+              { role: "assistant", content: JSON.stringify(item.data, null, 2) },
             ]);
           }
           if (item.event === "error" && isRecord(item.data)) {
             setError(String(item.data.error || "Agent 调用失败"));
           }
         },
-        abortRef.current.signal
+        abortRef.current.signal,
       );
+      await refreshConversations();
     } catch (err) {
       if (!(err instanceof DOMException && err.name === "AbortError")) {
         setError(err instanceof Error ? err.message : "请求失败");
@@ -133,6 +187,40 @@ export default function HomePage() {
       </header>
 
       <section className="workspace">
+        <aside className="panel sidebar-panel">
+          <div className="section-head">
+            <h2>History</h2>
+          </div>
+          <button
+            className="button secondary new-chat"
+            type="button"
+            onClick={startNewChat}
+            disabled={busy}
+          >
+            <MessageSquarePlus size={16} />
+            <span>New chat</span>
+          </button>
+          {convsError && <div className="conv-empty">{convsError}</div>}
+          <div className="conv-list">
+            {conversations.length === 0 && !convsError ? (
+              <div className="conv-empty">No conversations yet</div>
+            ) : (
+              conversations.map((conv) => (
+                <div
+                  key={conv.id}
+                  className={`conv-item ${conv.id === conversationId ? "active" : ""}`}
+                  onClick={() => selectConversation(conv.id)}
+                >
+                  <span className="conv-title">{conv.title || "Untitled"}</span>
+                  <span className="conv-meta">
+                    {conv.message_count} msgs · {formatDate(conv.updated_at)}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </aside>
+
         <aside className="panel setup-panel">
           <div className="section-head">
             <h2>Input</h2>
@@ -220,4 +308,18 @@ export default function HomePage() {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function formatDate(iso: string): string {
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mm = String(d.getMinutes()).padStart(2, "0");
+    return `${month}-${day} ${hh}:${mm}`;
+  } catch {
+    return iso;
+  }
 }

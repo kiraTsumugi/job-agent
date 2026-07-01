@@ -1,0 +1,503 @@
+{
+  "generated_at": "2026-07-01T07:27:38.139574+00:00",
+  "config": {
+    "embedding_backend": "hash",
+    "embedding_model": "BAAI/bge-m3",
+    "reranker_model": "BAAI/bge-reranker-v2-m3",
+    "reranker_provider": "siliconflow",
+    "top_k_pool": 20
+  },
+  "total": 8,
+  "baseline": {
+    "mrr": 0.0,
+    "recall_at_3": 0.0,
+    "recall_at_5": 0.0
+  },
+  "reranked": {
+    "mrr": 0.0,
+    "recall_at_3": 0.0,
+    "recall_at_5": 0.0
+  },
+  "delta": {
+    "mrr": 0.0,
+    "recall_at_3": 0.0,
+    "recall_at_5": 0.0
+  },
+  "caveat": "baseline uses settings.EMBEDDING_BACKEND (hash by default). Production with bge-m3 local embedding will likely show smaller reranker gain.",
+  "baseline_cases": [
+    {
+      "case_id": "44adde60-77db-4708-b367-ddb2fca27978",
+      "title": "岗位：(Senior) GenAI Engineer (f/m/d)\n公司：Trusted Shops SE (DE)\n",
+      "gt_jd_id": "eval_44adde60-77db-4708-b367-ddb2fca27978",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "4f936de3-b617-4e50-8b22-faa920d057d7",
+      "title": "岗位：GenAI Innovation Engineer (all genders) - Gestalte die KI",
+      "gt_jd_id": "eval_4f936de3-b617-4e50-8b22-faa920d057d7",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "4d921d48-5441-4691-a4d8-1a22ab0d382c",
+      "title": "岗位：Site Reliability Engineer (m/f/d)\n公司：gridscale GmbH\n来源：ar",
+      "gt_jd_id": "eval_4d921d48-5441-4691-a4d8-1a22ab0d382c",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "ed7599e7-67b3-4a8c-bee9-65effa27fdff",
+      "title": "岗位：Graduate Business Operations Associate\n公司：Bezos.AI\n来源：rem",
+      "gt_jd_id": "eval_ed7599e7-67b3-4a8c-bee9-65effa27fdff",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "56913a19-9961-45fe-87a5-3c2fda17575e",
+      "title": "岗位：Data Engineers\n公司：EY\n来源：remoteok\n\nAt EY, weâre all in t",
+      "gt_jd_id": "eval_56913a19-9961-45fe-87a5-3c2fda17575e",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "1a759b04-0af5-459a-903b-9dc53c36a4d2",
+      "title": "岗位：British English Voice Recording Specialist Lancaster\n公司：O",
+      "gt_jd_id": "eval_1a759b04-0af5-459a-903b-9dc53c36a4d2",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "c68b4d74-4202-4aff-bab9-1ba1927ed681",
+      "title": "岗位：Founding Engineer\n公司：Junini GmbH\n来源：arbeitnow\n\nÜber junin",
+      "gt_jd_id": "eval_c68b4d74-4202-4aff-bab9-1ba1927ed681",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "6645e713-7b7a-4da5-ab81-517b0bbddd50",
+      "title": "岗位：Entry Level Scheduling &amp; Coordinating Reservations On",
+      "gt_jd_id": "eval_6645e713-7b7a-4da5-ab81-517b0bbddd50",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    }
+  ],
+  "reranked_cases": [
+    {
+      "case_id": "44adde60-77db-4708-b367-ddb2fca27978",
+      "gt_jd_id": "eval_44adde60-77db-4708-b367-ddb2fca27978",
+      "ranked_jd_ids": [
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "sample_ai_agent_intern",
+        "eval_real_jd_002",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_006",
+        "eval_real_jd_005",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "4f936de3-b617-4e50-8b22-faa920d057d7",
+      "gt_jd_id": "eval_4f936de3-b617-4e50-8b22-faa920d057d7",
+      "ranked_jd_ids": [
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "eval_real_jd_002",
+        "sample_ai_agent_intern",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_006",
+        "eval_real_jd_005",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "4d921d48-5441-4691-a4d8-1a22ab0d382c",
+      "gt_jd_id": "eval_4d921d48-5441-4691-a4d8-1a22ab0d382c",
+      "ranked_jd_ids": [
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "sample_ai_agent_intern",
+        "eval_real_jd_002",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_005",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "ed7599e7-67b3-4a8c-bee9-65effa27fdff",
+      "gt_jd_id": "eval_ed7599e7-67b3-4a8c-bee9-65effa27fdff",
+      "ranked_jd_ids": [
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "eval_real_jd_003",
+        "sample_ai_agent_intern",
+        "eval_real_jd_004",
+        "eval_real_jd_002",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_006",
+        "eval_real_jd_005",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "56913a19-9961-45fe-87a5-3c2fda17575e",
+      "gt_jd_id": "eval_56913a19-9961-45fe-87a5-3c2fda17575e",
+      "ranked_jd_ids": [
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "sample_ai_agent_intern",
+        "eval_real_jd_002",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_006",
+        "eval_real_jd_005",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "1a759b04-0af5-459a-903b-9dc53c36a4d2",
+      "gt_jd_id": "eval_1a759b04-0af5-459a-903b-9dc53c36a4d2",
+      "ranked_jd_ids": [
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "eval_real_jd_002",
+        "sample_ai_agent_intern",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_005",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "c68b4d74-4202-4aff-bab9-1ba1927ed681",
+      "gt_jd_id": "eval_c68b4d74-4202-4aff-bab9-1ba1927ed681",
+      "ranked_jd_ids": [
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "eval_real_jd_002",
+        "sample_ai_agent_intern",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_006",
+        "eval_real_jd_005",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    },
+    {
+      "case_id": "6645e713-7b7a-4da5-ab81-517b0bbddd50",
+      "gt_jd_id": "eval_6645e713-7b7a-4da5-ab81-517b0bbddd50",
+      "ranked_jd_ids": [
+        "b5dd58de-f4b0-4423-9251-ea7c04b6df24",
+        "52a010a8-a511-42c6-b033-9270075aa016",
+        "4ce02cc0-6231-4a20-b4a1-1abecb7cb065",
+        "f78977f5-28a2-4580-b60b-9e8df75ad82a",
+        "7861aac7-cc47-4a83-8762-c24d243769c6",
+        "8d2e58da-90f8-44b4-b1a5-a02ec1bb3fd1",
+        "2c616512-3a3b-4ba2-8473-7c8b217e0dc1",
+        "eval_real_jd_003",
+        "sample_ai_agent_intern",
+        "eval_real_jd_004",
+        "eval_real_jd_002",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_006",
+        "eval_real_jd_005",
+        "sample_llm_eval_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_007"
+      ],
+      "metrics": {
+        "mrr": 0.0,
+        "recall_at_3": 0,
+        "recall_at_5": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,392 @@
+{
+  "generated_at": "2026-07-01T07:38:24.581981+00:00",
+  "config": {
+    "embedding_backend": "hash",
+    "embedding_model": "BAAI/bge-m3",
+    "reranker_model": "BAAI/bge-reranker-v2-m3",
+    "reranker_provider": "siliconflow",
+    "top_k_pool": 20,
+    "query_mode": "title"
+  },
+  "total": 8,
+  "baseline": {
+    "mrr": 1.0,
+    "recall_at_3": 1.0,
+    "recall_at_5": 1.0
+  },
+  "reranked": {
+    "mrr": 1.0,
+    "recall_at_3": 1.0,
+    "recall_at_5": 1.0
+  },
+  "delta": {
+    "mrr": 0.0,
+    "recall_at_3": 0.0,
+    "recall_at_5": 0.0
+  },
+  "caveat": "baseline uses settings.EMBEDDING_BACKEND (hash by default). Production with bge-m3 local embedding will likely show smaller reranker gain.",
+  "baseline_cases": [
+    {
+      "case_id": "real_jd_001",
+      "title": "(Senior) GenAI Engineer (f/m/d)",
+      "gt_jd_id": "eval_real_jd_001",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_007",
+        "eval_real_jd_004",
+        "eval_real_jd_005",
+        "sample_ai_agent_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_002",
+      "title": "GenAI Innovation Engineer (all genders) - Gestalte die KI-Zukunft",
+      "gt_jd_id": "eval_real_jd_002",
+      "ranked_jd_ids": [
+        "eval_real_jd_002",
+        "eval_real_jd_007",
+        "eval_real_jd_001",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "eval_real_jd_005",
+        "sample_ai_agent_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_003",
+      "title": "Site Reliability Engineer (m/f/d)",
+      "gt_jd_id": "eval_real_jd_003",
+      "ranked_jd_ids": [
+        "eval_real_jd_003",
+        "eval_real_jd_001",
+        "eval_real_jd_007",
+        "eval_real_jd_002",
+        "eval_real_jd_004",
+        "eval_real_jd_005",
+        "sample_ai_agent_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_004",
+      "title": "Graduate Business Operations Associate",
+      "gt_jd_id": "eval_real_jd_004",
+      "ranked_jd_ids": [
+        "eval_real_jd_004",
+        "eval_real_jd_001",
+        "eval_real_jd_008",
+        "eval_real_jd_002",
+        "eval_real_jd_005",
+        "eval_real_jd_003",
+        "eval_real_jd_007",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "sample_ai_agent_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_005",
+      "title": "Data Engineers",
+      "gt_jd_id": "eval_real_jd_005",
+      "ranked_jd_ids": [
+        "eval_real_jd_005",
+        "eval_real_jd_004",
+        "eval_real_jd_008",
+        "eval_real_jd_001",
+        "eval_real_jd_003",
+        "eval_real_jd_002",
+        "eval_real_jd_007",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "sample_ai_agent_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_006",
+      "title": "British English Voice Recording Specialist Lancaster",
+      "gt_jd_id": "eval_real_jd_006",
+      "ranked_jd_ids": [
+        "eval_real_jd_006",
+        "eval_real_jd_001",
+        "eval_real_jd_007",
+        "eval_real_jd_004",
+        "eval_real_jd_005",
+        "eval_real_jd_003",
+        "eval_real_jd_002",
+        "eval_real_jd_008",
+        "sample_llm_eval_intern",
+        "sample_ai_agent_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_007",
+      "title": "Founding Engineer",
+      "gt_jd_id": "eval_real_jd_007",
+      "ranked_jd_ids": [
+        "eval_real_jd_007",
+        "eval_real_jd_002",
+        "eval_real_jd_001",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "eval_real_jd_005",
+        "sample_ai_agent_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_008",
+      "title": "Entry Level Scheduling &amp; Coordinating Reservations Online",
+      "gt_jd_id": "eval_real_jd_008",
+      "ranked_jd_ids": [
+        "eval_real_jd_008",
+        "eval_real_jd_004",
+        "eval_real_jd_001",
+        "eval_real_jd_006",
+        "eval_real_jd_002",
+        "eval_real_jd_005",
+        "eval_real_jd_003",
+        "eval_real_jd_007",
+        "sample_llm_eval_intern",
+        "sample_ai_agent_intern",
+        "sample_rag_engineer_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    }
+  ],
+  "reranked_cases": [
+    {
+      "case_id": "real_jd_001",
+      "gt_jd_id": "eval_real_jd_001",
+      "ranked_jd_ids": [
+        "eval_real_jd_001",
+        "eval_real_jd_002",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_007",
+        "sample_ai_agent_intern",
+        "eval_real_jd_008",
+        "eval_real_jd_005",
+        "eval_real_jd_006",
+        "sample_llm_eval_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_002",
+      "gt_jd_id": "eval_real_jd_002",
+      "ranked_jd_ids": [
+        "eval_real_jd_002",
+        "eval_real_jd_001",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_007",
+        "eval_real_jd_003",
+        "eval_real_jd_004",
+        "sample_llm_eval_intern",
+        "sample_ai_agent_intern",
+        "eval_real_jd_005",
+        "eval_real_jd_006",
+        "eval_real_jd_008"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_003",
+      "gt_jd_id": "eval_real_jd_003",
+      "ranked_jd_ids": [
+        "eval_real_jd_003",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_004",
+        "sample_llm_eval_intern",
+        "eval_real_jd_001",
+        "eval_real_jd_007",
+        "eval_real_jd_008",
+        "eval_real_jd_002",
+        "eval_real_jd_005",
+        "eval_real_jd_006",
+        "sample_ai_agent_intern"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_004",
+      "gt_jd_id": "eval_real_jd_004",
+      "ranked_jd_ids": [
+        "eval_real_jd_004",
+        "sample_rag_engineer_intern",
+        "sample_llm_eval_intern",
+        "eval_real_jd_001",
+        "eval_real_jd_008",
+        "eval_real_jd_003",
+        "eval_real_jd_005",
+        "sample_ai_agent_intern",
+        "eval_real_jd_007",
+        "eval_real_jd_006",
+        "eval_real_jd_002"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_005",
+      "gt_jd_id": "eval_real_jd_005",
+      "ranked_jd_ids": [
+        "eval_real_jd_005",
+        "sample_rag_engineer_intern",
+        "sample_llm_eval_intern",
+        "eval_real_jd_004",
+        "eval_real_jd_001",
+        "eval_real_jd_003",
+        "eval_real_jd_008",
+        "sample_ai_agent_intern",
+        "eval_real_jd_007",
+        "eval_real_jd_006",
+        "eval_real_jd_002"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_006",
+      "gt_jd_id": "eval_real_jd_006",
+      "ranked_jd_ids": [
+        "eval_real_jd_006",
+        "eval_real_jd_004",
+        "sample_llm_eval_intern",
+        "eval_real_jd_003",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_001",
+        "eval_real_jd_008",
+        "sample_ai_agent_intern",
+        "eval_real_jd_005",
+        "eval_real_jd_007",
+        "eval_real_jd_002"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_007",
+      "gt_jd_id": "eval_real_jd_007",
+      "ranked_jd_ids": [
+        "eval_real_jd_007",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_004",
+        "sample_llm_eval_intern",
+        "eval_real_jd_001",
+        "eval_real_jd_003",
+        "eval_real_jd_008",
+        "sample_ai_agent_intern",
+        "eval_real_jd_002",
+        "eval_real_jd_006",
+        "eval_real_jd_005"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    },
+    {
+      "case_id": "real_jd_008",
+      "gt_jd_id": "eval_real_jd_008",
+      "ranked_jd_ids": [
+        "eval_real_jd_008",
+        "eval_real_jd_004",
+        "sample_rag_engineer_intern",
+        "eval_real_jd_001",
+        "sample_llm_eval_intern",
+        "eval_real_jd_003",
+        "eval_real_jd_006",
+        "eval_real_jd_005",
+        "sample_ai_agent_intern",
+        "eval_real_jd_007",
+        "eval_real_jd_002"
+      ],
+      "metrics": {
+        "mrr": 1.0,
+        "recall_at_3": 1,
+        "recall_at_5": 1
+      }
+    }
+  ]
+}

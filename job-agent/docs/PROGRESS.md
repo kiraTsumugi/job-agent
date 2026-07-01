@@ -76,6 +76,12 @@
   - `Dockerfile` 改为读取 `${PORT:-8000}`，适配 Railway/Fly.io 注入端口。
   - 新增 `docs/DEPLOYMENT.md`，记录 Railway/Fly.io 后端、Vercel 前端、环境变量和 smoke test 约定。
   - `.env.example` 增加生产 CORS 提示；仓库 `.gitignore` 排除 `node_modules/` 和 `.next/`。
+- D12 第二批代码改动（rate limit + 历史会话侧栏）：
+  - 新增 `app/core/rate_limit.py`：自研滑动窗口限流器（in-memory，无新依赖）+ `client_ip` 工具（识别 `X-Forwarded-For` / `X-Real-IP`）。`app/main.py` 注册中间件：`/api/chat` 与 `/api/upload` 走 heavy limiter（默认 30 req/min/IP），其他 `/api/*` 走 general limiter（默认 120 req/min/IP），`/health` 和 `/ready` 豁免。超限返回 429 + `Retry-After`。
+  - 新增 `RATE_LIMIT_ENABLED` / `RATE_LIMIT_HEAVY_PER_MIN` / `RATE_LIMIT_GENERAL_PER_MIN` 三个 settings；`.env.example` 同步。
+  - 新增 `tests/test_rate_limit.py` 覆盖 health 豁免、heavy 端点超限 429、429 响应 schema；后端测试 48 passed。
+  - 前端新增左侧历史会话侧栏：`lib/api.ts` 加 `listConversations` / `getConversation`；`page.tsx` 改 4 列 grid，初始加载 + chat 完成后刷新列表，点击 conversation 拉取详情填充 messages，"New chat" 按钮重置状态。
+  - 后端 + 前端联调 smoke：`/health`、`/ready`、`/api/conversations`、`/api/upload`（非法格式正确返回 400 + 中文错误），rate limit 中间件按预期豁免 `/health` / `/ready`。
 
 ## 主要缺口
 
@@ -120,6 +126,8 @@
 - `cd frontend && npm run lint`
 - `cd frontend && npm run build`
 - `cd frontend && npm audit`
+- `.venv/bin/python -m pytest -q tests/test_rate_limit.py`
+- `unset HTTP_PROXY HTTPS_PROXY http_proxy https_proxy ALL_PROXY all_proxy; .venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8217`，然后 curl `/health` `/ready` `/api/conversations` `/api/upload` 全部符合预期（注意：`http_proxy=127.0.0.1:7897` 会截本地端口的请求，必须 unset 或设 `NO_PROXY=127.0.0.1,localhost`）。
 - FastAPI app 导入 smoke test
 - AgentGraph 导入 smoke test
 - Prompt `.format()` smoke test
@@ -127,11 +135,10 @@
 
 ## 下一步方向
 
-D12 已开始。v2 + strict judge 是当前生产默认，reranker 暂不进入默认链路。下一步继续部署闭环：
+D12 代码侧准备收尾。v2 + strict judge 是生产默认，rate limit 已上、历史会话侧栏已上、reranker 不进默认链路。剩下是实际部署动作：
 
-1. 用生产配置跑一次本地端到端 smoke：前端 `npm run dev` + 后端真实 DeepSeek/SiliconFlow + Docker PG/Qdrant/Redis。
-2. 加 Embedding 缓存（Redis）和基础 rate limit，再压测 P95。
-3. 部署后端到 Railway / Fly.io，前端到 Vercel，填入生产 CORS 和 `NEXT_PUBLIC_API_BASE_URL`。
-4. 补前端历史会话侧栏、评测报告入口和简历/JD diff 视图。
-5. 录 2 分钟 demo 视频 + 写 README/博客，进 D13。
-6. （可选优化）v2 `completeness` 弱点排查：定位 Case 6 Voice Recording / Case 4 Business Ops 在 `expected_gaps` 短（1-2 条）时为何漏命中。
+1. 部署后端到 Railway / Fly.io，前端到 Vercel，填生产 CORS 和 `NEXT_PUBLIC_API_BASE_URL`（用户操作，需要账号）。
+2. 部署后跑 `curl https://<backend>/ready` 验证三个依赖服务健康；前端访问一次完整链路（上传 → JD → SSE → 历史）。
+3. 录 2 分钟 demo 视频 + README + 博客，进 D13。
+4. （可选优化）v2 `completeness` 弱点排查；前端补评测报告入口和 JD/简历 diff 视图。
+5. （可选优化）Embedding 缓存（Redis），单 worker 流量小，D12 不做也不阻塞。

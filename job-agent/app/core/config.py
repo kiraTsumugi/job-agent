@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     LOG_LEVEL: str = "DEBUG"
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:8501"]
+    RATE_LIMIT_ENABLED: bool = True
+    RATE_LIMIT_HEAVY_PER_MIN: int = 30
+    RATE_LIMIT_GENERAL_PER_MIN: int = 120
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod

@@ -1,13 +1,15 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from qdrant_client import AsyncQdrantClient
 from redis.asyncio import from_url as redis_from_url
 from sqlalchemy import text
 
 from app.core.config import settings
 from app.core.logging import setup_logging
+from app.core.rate_limit import SlidingWindowLimiter, client_ip
 from app.api import chat, upload, jd, eval as eval_api
 from app.models.db import async_engine, Base
 
@@ -35,6 +37,28 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+_heavy_limiter = SlidingWindowLimiter(settings.RATE_LIMIT_HEAVY_PER_MIN, 60)
+_general_limiter = SlidingWindowLimiter(settings.RATE_LIMIT_GENERAL_PER_MIN, 60)
+
+_HEAVY_PREFIXES = ("/api/chat", "/api/upload")
+
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    if not settings.RATE_LIMIT_ENABLED or request.url.path in ("/health", "/ready"):
+        return await call_next(request)
+    ip = client_ip(request)
+    path = request.url.path
+    limiter = _heavy_limiter if path.startswith(_HEAVY_PREFIXES) else _general_limiter
+    allowed, retry_after = limiter.check(ip)
+    if not allowed:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "rate limit exceeded", "retry_after": retry_after},
+            headers={"Retry-After": str(retry_after)},
+        )
+    return await call_next(request)
 
 app.include_router(chat.router, prefix="/api", tags=["chat"])
 app.include_router(upload.router, prefix="/api", tags=["upload"])
