@@ -38,10 +38,10 @@ Qdrant 不在 Railway 上,用第 1 步的 Qdrant Cloud。
 
 1. Railway 项目里 **New → GitHub Repo**(同一个 repo)
 2. **Settings**:
-   - **Root Directory**:`/`(repo 根,因为 Dockerfile 在根)
+   - **Root Directory**:`job-agent`(repo 根是 `proj/`,代码在 `proj/job-agent/`)
    - **Build Command**:留空(Dockerfile 自动)
    - **Start Command**:留空(Dockerfile CMD)
-   - Railway 会自动识别 Dockerfile
+   - Railway 会自动识别 `job-agent/Dockerfile`
 3. **Variables**(逐个填,见下表)
 
 ### 2.4 环境变量清单
@@ -127,7 +127,7 @@ sh -c "python scripts/ingest.py --vectors && python scripts/ingest_eval_jds.py"
 ### 3.2 配置
 
 - **Framework Preset**:Next.js(自动检测)
-- **Root Directory**:`frontend/`(重要!点 Expand 后选 frontend 文件夹)
+- **Root Directory**:`job-agent/frontend`(repo 根是 `proj/`,前端在 `proj/job-agent/frontend/`)
 - **Build Command**:`npm run build`(默认)
 - **Output Directory**:`.next`(默认)
 
