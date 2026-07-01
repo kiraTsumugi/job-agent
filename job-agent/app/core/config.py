@@ -1,8 +1,8 @@
 import json
-from typing import Any
+from typing import Annotated, Any
 
 from pydantic import field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     # App
     APP_ENV: str = "development"
     LOG_LEVEL: str = "DEBUG"
-    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:8501"]
+    CORS_ORIGINS: Annotated[list[str], NoDecode] = ["http://localhost:3000", "http://localhost:8501"]
     RATE_LIMIT_ENABLED: bool = True
     RATE_LIMIT_HEAVY_PER_MIN: int = 30
     RATE_LIMIT_GENERAL_PER_MIN: int = 120
@@ -47,9 +47,12 @@ class Settings(BaseSettings):
     def parse_cors_origins(cls, v: Any) -> list[str]:
         if isinstance(v, list):
             return v
-        if isinstance(v, str) and not v.strip().startswith("["):
+        if isinstance(v, str):
+            stripped = v.strip()
+            if stripped.startswith("["):
+                return list(json.loads(stripped))
             return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return json.loads(v)
+        return []
 
 
 settings = Settings()
