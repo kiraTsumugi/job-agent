@@ -16,4 +16,5 @@ docs
 README.md
 tests
 mcp
-scripts
+scripts/__pycache__
+scripts/.pytest_cache
