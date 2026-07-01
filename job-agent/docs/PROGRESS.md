@@ -93,6 +93,57 @@ D12 部署闭环完成。线上 demo 已可访问。进 D13(README + demo 视频
   - 生产数据：PG `JD` 表 11 条（3 sample + 8 eval）；Qdrant collection `job_agent_chunks_bge_m3_sf` 写入 16 个 chunks；每次 redeploy 自动幂等重灌。
   - 端到端冒烟通过：上传 PDF/DOCX → JD → SSE 流（`conversation → planner → retriever → analyzer → complete → done`）→ 历史会话侧栏加载 → 多轮 rewrite 节点触发；样例简历对 SAMPLE_JD 给出 match_score=80。
 
+## 已知安全问题（D12 上线后发现，未修复）
+
+线上 demo 公网可达后，发现 3 类端点缺乏访问控制，会泄漏用户数据或被滥用：
+
+### HIGH-1：`GET /api/conversations` + `GET /api/conversations/{id}` 全量泄漏简历分析结果
+
+- **现象**：任何人（无认证）访问 `https://job-agent-production-014d.up.railway.app/api/conversations` 可拿到所有 conversation 列表，含完整 `messages`（user message 含简历原文，assistant message 含 gap/strengths/risks 分析）。
+- **根因**：`app/api/chat.py::list_conversations` 用 `WHERE user_id == DEFAULT_USER_ID` 查询，`DEFAULT_USER_ID` 是全局常量，所有人共享。`Conversation` 表已有 `user_id` 字段，但代码偷懒没让请求带身份。
+- **影响**：简历包含真实姓名、邮箱、电话、教育、工作经历；公网任何人可读。
+- **当前暴露数据**：2 条 conversation（含测试时的 SAMPLE_JD 分析 + "把项目 2 改突出 RAG 经验" rewrite），需手动清理。
+- **修复方案**：浏览器 session_id 隔离。前端首次访问生成 UUID 存 `localStorage['session_id']`，所有请求带 `X-Session-Id` header；后端把 `DEFAULT_USER_ID` 替换为 `request.headers["X-Session-Id"]`，缺失返回 403。无登录体验，清缓存丢历史（可接受）。
+- **影响代码**：`app/api/chat.py`（list_conversations / get_conversation / chat_stream），`app/services/conversation.py`，`frontend/lib/api.ts`，`frontend/app/page.tsx`。
+
+### HIGH-2：`POST /api/eval/run` + `POST /api/eval/cases` 可被陌生人触发，烧 LLM 配额
+
+- **现象**：公网任何人 `POST /api/eval/run` 可触发全量评测跑分，会循环调用 DeepSeek 主链路 + DeepSeek judge（8 cases × ~5 次 LLM 调用 = 40 次 DeepSeek 请求 / 次），烧 API 配额。
+- **根因**：`app/api/eval.py` 路由无鉴权，`run_eval` 直接调 `app.eval.runner.run_evaluation`。
+- **影响**：DoS / 经济攻击；他人可恶意反复触发耗尽 DeepSeek 余额。
+- **修复方案**：加 `EVAL_ADMIN_TOKEN` 环境变量，`POST /api/eval/*` 路由检查 `X-Admin-Token` header，缺失或不匹配返回 403。本地评测时带上 token。
+- **影响代码**：`app/api/eval.py`，新增 `app/core/auth.py`（admin token 工具）。
+
+### MEDIUM-3：`GET /api/jds` 全量返回，用户保存的 JD 共享
+
+- **现象**：任何人 `GET /api/jds` 可拿到所有用户保存的 JD（含 `raw_text`）。
+- **根因**：跟 HIGH-1 类似，无 `user_id` 隔离。但 `JD` 表当前没有 `user_id` 字段。
+- **影响**：JD 主要是公开招聘信息，泄漏敏感度低于简历；但用户手动保存的 JD 仍属个人数据。
+- **修复方案**：`JD` 表加 `user_id` 字段；sample/eval JD（`eval_real_jd_*`、`sample_*`）打 `is_public=True` 标记，所有用户可见；其他 JD 按 session_id 隔离。
+- **影响代码**：`app/models/db.py`（加字段），`app/api/jd.py`，`scripts/ingest.py`、`scripts/ingest_eval_jds.py`（默认 `is_public=True`），需要 DB migration 或 `Base.metadata.create_all` 自动加列。
+
+### LOW：`GET /api/eval/cases` + `GET /api/eval/results` 公开
+
+- 评测数据本来就是项目 showcase 一部分，可保持公开；但 `/eval/run` 修复后，陌生人无法再触发新评测。
+
+### 临时缓解
+
+- **不要把 Vercel URL（`https://job-agent-one-peach.vercel.app`）分享给任何人**，已分享请撤回。
+- 不要在简历/博客中放后端 Railway URL，避免被直接调 API。
+
+### 修复优先级
+
+1. **P0**：HIGH-1 session_id 隔离 + 清理已有 2 条泄漏 conversation。
+2. **P0**：HIGH-2 admin token。
+3. **P1**：MEDIUM-3 JD 隔离（加 `is_public` 标记 + user_id）。
+4. **P2**：完整认证系统（注册/登录 + JWT，demo 项目暂不需要）。
+
+### 修复时注意
+
+- session_id 隔离改 API 行为契约（加 header），按 commit strategy 需在 push 前 commit 当前快照。
+- `Base.metadata.create_all` 不会自动加新列到已存在的表，JD 表加 `user_id` 需要手动 migration 或 drop/recreate（生产 drop 不可接受，必须用 alembic 或手动 `ALTER TABLE`）。
+
+
 ## 主要缺口
 
 - 项目虚拟环境 `.venv` 已创建；默认依赖和测试依赖用于后端开发，ML 本地模型依赖需要单独安装 `.[ml]`。
