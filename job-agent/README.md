@@ -36,13 +36,20 @@ cp .env.example .env
 # 4. 启动 API
 uvicorn app.main:app --reload --port 8000
 
-# 5. (可选) 启动 MCP Server
+# 5. 启动前端
+cd frontend
+npm install
+npm run dev
+
+# 6. (可选) 启动 MCP Server
 python mcp/server.py
 ```
 
 ## API 文档
 
 启动后访问 http://localhost:8000/docs 查看 Swagger UI。
+
+前端默认访问 `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000`。
 
 | 端点 | 说明 |
 |------|------|
@@ -55,6 +62,12 @@ python mcp/server.py
 | `POST /api/jds/search` | 混合检索 JD |
 | `POST /api/eval/run` | 触发评测 |
 | `GET /api/eval/results` | 查看评测结果 |
+| `GET /health` | 存活检查 |
+| `GET /ready` | PostgreSQL/Redis/Qdrant 就绪诊断 |
+
+## 部署
+
+部署约定见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。
 
 ## 评测
 

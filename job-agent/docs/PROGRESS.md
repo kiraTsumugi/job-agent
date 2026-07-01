@@ -2,7 +2,7 @@
 
 ## 当前阶段
 
-项目处在 `AI_Agent_实习项目方案.md` 的 D11 收口阶段，准备进 D12 部署。
+项目处在 `AI_Agent_实习项目方案.md` 的 D12 部署阶段。
 
 已完成：
 
@@ -70,12 +70,18 @@
 - SiliconFlow bge-m3 embedding 已接入：`EMBEDDING_BACKEND=siliconflow`、`EMBEDDING_DIM=1024`。本地 `.env` 已切到新 Qdrant collection `job_agent_chunks_bge_m3_sf`，避免和旧 384 维 hash collection 冲突。
 - 8 条 eval JD 已用 bge-m3 重新写入新 collection：`scripts/ingest_eval_jds.py --file data/eval/real_jd_cases.jsonl`，Qdrant 校验为 `points=16`、`vector_size=1024`。
 - Reranker 最后一次短 query 机会已在 bge-m3 collection 上验证：`scripts/retrieval_ab.py --query-mode keywords --top-k-pool 20` 在 8 条 eval JD 上仍然负收益，baseline RRF `recall_at_3=0.3750 / recall_at_5=0.6250 / mrr=0.3397`，+ SiliconFlow rerank 降到 `0.1250 / 0.1250 / 0.1219`，报告为 `data/eval/reports/retrieval/retrieval_ab_20260701_123525.md`。结论：当前 reranker 不进入默认检索链路，保留为实验脚本。
+- D12 第一批部署准备已完成：
+  - 新增 `frontend/` Next.js 最小前端；因 Next 14 依赖审计存在运行时漏洞，前端已升级到 Next 16.2.9。当前支持上传简历、保存 JD、POST SSE 调用 `/api/chat/stream`、展示事件流和最终 JSON。
+  - 新增 `GET /ready`，返回 PostgreSQL、Redis、Qdrant 诊断；`GET /health` 保持轻量 liveness。
+  - `Dockerfile` 改为读取 `${PORT:-8000}`，适配 Railway/Fly.io 注入端口。
+  - 新增 `docs/DEPLOYMENT.md`，记录 Railway/Fly.io 后端、Vercel 前端、环境变量和 smoke test 约定。
+  - `.env.example` 增加生产 CORS 提示；仓库 `.gitignore` 排除 `node_modules/` 和 `.next/`。
 
 ## 主要缺口
 
 - 项目虚拟环境 `.venv` 已创建；默认依赖和测试依赖用于后端开发，ML 本地模型依赖需要单独安装 `.[ml]`。
 - Eval runner 已有骨架，但依赖 Agent 和外部 LLM key。
-- 前端还没有实现。
+- 前端已有最小可部署 MVP，但还没有历史会话侧栏、评测看板和 diff 视图。
 
 ## 本地验证
 
@@ -109,6 +115,11 @@
 - `JUDGE_BACKEND=openai JUDGE_MODEL=deepseek-chat .venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --rejudge-from deepseek_v2_20260701 --run-id deepseek_v2_strict_judge_20260701 --export-report --archive`
 - `.venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --compare-run-ids deepseek_v1_strict_judge_20260701 deepseek_v2_strict_judge_20260701 --archive`
 - `.venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --export-run-id v2_prompt_mock_smoke_20260701 --archive --report-dir /tmp/job-agent-v2-report-smoke-2`
+- `.venv/bin/python -m pytest -q tests/test_health.py tests/test_rag.py`
+- `.venv/bin/python -m compileall -q app tests scripts`
+- `cd frontend && npm run lint`
+- `cd frontend && npm run build`
+- `cd frontend && npm audit`
 - FastAPI app 导入 smoke test
 - AgentGraph 导入 smoke test
 - Prompt `.format()` smoke test
@@ -116,10 +127,11 @@
 
 ## 下一步方向
 
-D11 收口完成。v2 + strict judge 已经是新的生产默认。下一步进 D12 部署：
+D12 已开始。v2 + strict judge 是当前生产默认，reranker 暂不进入默认链路。下一步继续部署闭环：
 
-1. 部署后端到 Railway / Fly.io，前端到 Vercel（前端尚未实现，需先做 Next.js 14 前端，对应 `AI_Agent_实习项目方案.md` D6 的前端 v1）。
-2. 加 Embedding 缓存（Redis）和 rate limit，再压测 P95。
-3. 录 2 分钟 demo 视频 + 写 README/博客，进 D13。
-4. （可选优化）v2 `completeness` 弱点排查：定位 Case 6 Voice Recording / Case 4 Business Ops 在 `expected_gaps` 短（1-2 条）时为何漏命中，可能需要在 v2_analyze 加一条"简单 case 优先列 must_have，不要为对齐 schema 硬塞"的指令。
-5. Reranker 暂不集成到默认路径；bge-m3 collection 上的短 query A/B 已确认仍为负收益，后续只有在 query 构造或候选集策略变更后才值得重测。
+1. 用生产配置跑一次本地端到端 smoke：前端 `npm run dev` + 后端真实 DeepSeek/SiliconFlow + Docker PG/Qdrant/Redis。
+2. 加 Embedding 缓存（Redis）和基础 rate limit，再压测 P95。
+3. 部署后端到 Railway / Fly.io，前端到 Vercel，填入生产 CORS 和 `NEXT_PUBLIC_API_BASE_URL`。
+4. 补前端历史会话侧栏、评测报告入口和简历/JD diff 视图。
+5. 录 2 分钟 demo 视频 + 写 README/博客，进 D13。
+6. （可选优化）v2 `completeness` 弱点排查：定位 Case 6 Voice Recording / Case 4 Business Ops 在 `expected_gaps` 短（1-2 条）时为何漏命中。
