@@ -2,6 +2,7 @@
 
 import pytest
 
+from app.core.config import settings
 from app.rag.chunker import FixedChunker, SemanticChunker, RecursiveChunker
 
 
@@ -117,3 +118,54 @@ class TestHashEmbedding:
         assert len(first) == 32
         norm = sum(value * value for value in first) ** 0.5
         assert norm == pytest.approx(1.0)
+
+
+class TestSiliconFlowEmbedding:
+    @pytest.mark.asyncio
+    async def test_siliconflow_embedding_backend_posts_openai_compatible_payload(self, monkeypatch):
+        from app.rag import embedder
+
+        calls = []
+
+        class FakeResponse:
+            def raise_for_status(self):
+                return None
+
+            def json(self):
+                return {
+                    "data": [
+                        {"index": 1, "embedding": [0.0, 1.0, 0.0]},
+                        {"index": 0, "embedding": [1.0, 0.0, 0.0]},
+                    ]
+                }
+
+        class FakeClient:
+            def __init__(self, timeout):
+                self.timeout = timeout
+
+            async def __aenter__(self):
+                return self
+
+            async def __aexit__(self, exc_type, exc, tb):
+                return None
+
+            async def post(self, url, json, headers):
+                calls.append({"url": url, "json": json, "headers": headers, "timeout": self.timeout})
+                return FakeResponse()
+
+        monkeypatch.setattr(settings, "EMBEDDING_BACKEND", "siliconflow")
+        monkeypatch.setattr(settings, "EMBEDDING_MODEL", "BAAI/bge-m3")
+        monkeypatch.setattr(settings, "SILICONFLOW_API_KEY", "test-key")
+        monkeypatch.setattr(settings, "SILICONFLOW_BASE_URL", "https://api.siliconflow.cn")
+        monkeypatch.setattr(embedder.httpx, "AsyncClient", FakeClient)
+
+        embeddings = await embedder.embed_texts(["first", "second"])
+
+        assert embeddings == [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]]
+        assert calls[0]["url"] == "https://api.siliconflow.cn/v1/embeddings"
+        assert calls[0]["json"] == {
+            "model": "BAAI/bge-m3",
+            "input": ["first", "second"],
+            "encoding_format": "float",
+        }
+        assert calls[0]["headers"]["Authorization"] == "Bearer test-key"

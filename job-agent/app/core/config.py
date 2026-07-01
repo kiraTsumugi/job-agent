@@ -18,11 +18,13 @@ class Settings(BaseSettings):
     JUDGE_MODEL: str = "deepseek-chat"
 
     # Embedding
-    EMBEDDING_BACKEND: str = "hash"  # hash | local
+    EMBEDDING_BACKEND: str = "hash"  # hash | local | siliconflow
     EMBEDDING_DIM: int = 384
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
     RERANKER_MODEL: str = "BAAI/bge-reranker-v2-m3"
     ENABLE_LOCAL_RERANKER: bool = False
+    SILICONFLOW_API_KEY: str = ""
+    SILICONFLOW_BASE_URL: str = "https://api.siliconflow.cn"
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://jobagent:jobagent@localhost:5432/jobagent"
