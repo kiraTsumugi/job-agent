@@ -1,0 +1,23 @@
+[
+  {
+    "id": "sample_ai_agent_intern",
+    "title": "AI Agent 实习生",
+    "company": "示例科技",
+    "raw_text": "岗位职责：参与 AI Agent 应用开发，基于 LangGraph 设计多轮对话状态机，接入 Tool Calling 和 MCP 工具。岗位要求：熟悉 Python、FastAPI、LangChain 或 LangGraph；理解 RAG、向量数据库 Qdrant/Milvus、Prompt Engineering；有 Badcase 分析和评测经验优先。",
+    "source_url": "https://example.com/jobs/ai-agent-intern"
+  },
+  {
+    "id": "sample_rag_engineer_intern",
+    "title": "RAG 工程实习生",
+    "company": "示例智能",
+    "raw_text": "岗位职责：建设垂直领域知识库，负责文档解析、分块、Embedding、Hybrid Search、Rerank 和引用溯源。岗位要求：熟悉 bge-m3、BM25、Qdrant、PostgreSQL；能够设计 Recall@K、TopK 命中率等评测指标；有 FastAPI 服务化经验。",
+    "source_url": "https://example.com/jobs/rag-engineer-intern"
+  },
+  {
+    "id": "sample_llm_eval_intern",
+    "title": "LLM 评测实习生",
+    "company": "示例云",
+    "raw_text": "岗位职责：搭建 Agent 评测集和 Badcase 分析流程，维护 Prompt 版本，对模型输出做事实性、相关性、完整性评估。岗位要求：熟悉 Python、LLM-as-Judge、Trace 采集、数据标注；了解 Claude、DeepSeek 或 Qwen API；有全栈看板开发经验加分。",
+    "source_url": "https://example.com/jobs/llm-eval-intern"
+  }
+]
