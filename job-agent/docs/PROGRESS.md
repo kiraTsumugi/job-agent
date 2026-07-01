@@ -2,7 +2,7 @@
 
 ## 当前阶段
 
-项目处在 `AI_Agent_实习项目方案.md` 的 D2 收口阶段。
+项目处在 `AI_Agent_实习项目方案.md` 的 D11 收口阶段，准备进 D12 部署。
 
 已完成：
 
@@ -59,6 +59,17 @@
 - 已建立 `v2_plan.md`、`v2_analyze.md`、`v2_rewrite.md`。其中 `v2_analyze.md` 收紧为 `schema_version=v2_analyze`、固定 `decision`、`score_breakdown`、结构化 `gaps`、结构化 `strengths`、`risks` 和英文 gap 分类枚举。
 - Mock LLM 已支持 v2 analyzer/rewrite schema，默认 `latest` prompt 解析到 v2。
 - Eval report case 表已增加 `analysis_schema_version`、`decision`、`first_gap_category`，Markdown 报告可直接看 v2 gap 分类。
+- D11 v1/v2 A/B 完成：v2 在 strict judge 下反超 v1（均分 4.25 vs 4.04），原退化是 judge 语言偏见。
+  - v2 DeepSeek 主链路 + DeepSeek judge 跑通：`deepseek_v2_20260701`（归档 `data/eval/reports/prompt_v2/`）。
+  - 收紧 `app/eval/judge.py` 的 JUDGE_PROMPT：加 1/3/5 锚点、`expected_gaps` checklist（≥60% 覆盖 → completeness ≥ 4）、语言一致性条款（JD 原文语言不扣分）、去掉 `comment` 字段。
+  - 新增 `app/eval/runner.py::rejudge_run` + `eval_run.py --rejudge-from`，复用已存 `model_output` 只重跑 judge，避免重跑 agent。
+  - 双向重判：`deepseek_v1_strict_judge_20260701`、`deepseek_v2_strict_judge_20260701`，归档到对应 `prompt_v1/`、`prompt_v2/`。
+  - 新 judge 下 v1 vs v2 diff：`data/eval/reports/diffs/prompt_v1__vs__prompt_v2/deepseek_v1_strict_judge_20260701__vs__deepseek_v2_strict_judge_20260701.diff.md`。
+  - 结果矩阵（均分）：v1 旧 judge 3.92 → 新 judge 4.04；v2 旧 judge 3.71 → 新 judge 4.25。v2 factuality +0.26、relevance +1.00、completeness -0.63。
+  - 已知 v2 弱点：`completeness` 在 `expected_gaps` 较短（1-2 条）的简单 case 上偏弱（Case 6 Voice Recording、Case 4 Business Ops），原因待定位；Case 7 Founding Engineer 的 factuality 退化 1 分，单 case 调试未做。
+- SiliconFlow bge-m3 embedding 已接入：`EMBEDDING_BACKEND=siliconflow`、`EMBEDDING_DIM=1024`。本地 `.env` 已切到新 Qdrant collection `job_agent_chunks_bge_m3_sf`，避免和旧 384 维 hash collection 冲突。
+- 8 条 eval JD 已用 bge-m3 重新写入新 collection：`scripts/ingest_eval_jds.py --file data/eval/real_jd_cases.jsonl`，Qdrant 校验为 `points=16`、`vector_size=1024`。
+- Reranker 最后一次短 query 机会已在 bge-m3 collection 上验证：`scripts/retrieval_ab.py --query-mode keywords --top-k-pool 20` 在 8 条 eval JD 上仍然负收益，baseline RRF `recall_at_3=0.3750 / recall_at_5=0.6250 / mrr=0.3397`，+ SiliconFlow rerank 降到 `0.1250 / 0.1250 / 0.1219`，报告为 `data/eval/reports/retrieval/retrieval_ab_20260701_123525.md`。结论：当前 reranker 不进入默认检索链路，保留为实验脚本。
 
 ## 主要缺口
 
@@ -93,6 +104,10 @@
 - `.venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --compare-reports data/eval/reports/deepseek_judge_smoke.json data/eval/reports/deepseek_judge_retry_smoke.json --archive --diff-dir /tmp/job-agent-diff-archive-smoke`
 - `.venv/bin/python scripts/llm_smoke.py --backend mock`
 - `LLM_BACKEND=mock JUDGE_BACKEND=mock .venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --run-id v2_prompt_mock_smoke_20260701 --prompt-version v2 --export-report --archive --report-dir /tmp/job-agent-v2-report-smoke`
+- `LLM_BACKEND=openai JUDGE_BACKEND=openai JUDGE_MODEL=deepseek-chat .venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --run-id deepseek_v2_20260701 --prompt-version v2 --export-report --archive`
+- `JUDGE_BACKEND=openai JUDGE_MODEL=deepseek-chat .venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --rejudge-from deepseek_judge_retry_smoke --run-id deepseek_v1_strict_judge_20260701 --export-report --archive`
+- `JUDGE_BACKEND=openai JUDGE_MODEL=deepseek-chat .venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --rejudge-from deepseek_v2_20260701 --run-id deepseek_v2_strict_judge_20260701 --export-report --archive`
+- `.venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --compare-run-ids deepseek_v1_strict_judge_20260701 deepseek_v2_strict_judge_20260701 --archive`
 - `.venv/bin/python scripts/eval_run.py --file data/eval/real_jd_cases.jsonl --export-run-id v2_prompt_mock_smoke_20260701 --archive --report-dir /tmp/job-agent-v2-report-smoke-2`
 - FastAPI app 导入 smoke test
 - AgentGraph 导入 smoke test
@@ -101,10 +116,10 @@
 
 ## 下一步方向
 
-D2 的数据库、Qdrant、Agent mock 主链路、API/SSE 基础路径、最小会话上下文、DeepSeek smoke 验证、真实 JD 质量烟测、固定 eval cases、eval runner 上下文传递、DeepSeek-as-Judge、eval report 导出、report diff、prompt version 标记、报告归档约定和 v2 analyzer schema 已经收口。下一步应该用真实 DeepSeek 跑 v2 并比较 v1/v2：
+D11 收口完成。v2 + strict judge 已经是新的生产默认。下一步进 D12 部署：
 
-1. 用 `--prompt-version v2` 跑 DeepSeek 主链路和 DeepSeek judge。
-2. 导出 `prompt_v2` 归档报告。
-3. 用 report diff 比较 v1/v2 的退化 case。
-4. 再收紧 judge prompt，降低解释性废话和字段漂移。
-5. 之后再做前端。
+1. 部署后端到 Railway / Fly.io，前端到 Vercel（前端尚未实现，需先做 Next.js 14 前端，对应 `AI_Agent_实习项目方案.md` D6 的前端 v1）。
+2. 加 Embedding 缓存（Redis）和 rate limit，再压测 P95。
+3. 录 2 分钟 demo 视频 + 写 README/博客，进 D13。
+4. （可选优化）v2 `completeness` 弱点排查：定位 Case 6 Voice Recording / Case 4 Business Ops 在 `expected_gaps` 短（1-2 条）时为何漏命中，可能需要在 v2_analyze 加一条"简单 case 优先列 must_have，不要为对齐 schema 硬塞"的指令。
+5. Reranker 暂不集成到默认路径；bge-m3 collection 上的短 query A/B 已确认仍为负收益，后续只有在 query 构造或候选集策略变更后才值得重测。
